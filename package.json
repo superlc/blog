@@ -22,7 +22,7 @@
     "koa-router": "^7.4.0",
     "markdown-it": "^8.4.2",
     "mavon-editor": "^2.6.17",
-    "mongodb": "^3.1.6",
+    "mongoose": "^5.3.5",
     "nuxt": "^2.0.0"
   },
   "devDependencies": {

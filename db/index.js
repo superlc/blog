@@ -1,31 +1,35 @@
-const MongoClient = require('mongodb').MongoClient
+const mongoose = require('mongoose')
 const config = require('./config')
 
+// 连接单例
+let db = void(0)
 module.exports = {
-    /**
-     * 连接数据库，返回数据库操作对象及相应的句柄
-     */
     connect() {
         return new Promise((resolve, reject) => {
-            MongoClient
-            .connect(config.dbUrl)
-            .then(client => {
-                const db = client.db(config.dbName)
-
-                console.log(`数据库${config.dbName}连接成功`)
-
+            if (db) {
                 resolve({
-                    db,
-                    client
+                    status: true,
+                    message: 'Mongodb已连接过'
                 })
-            })
-            .catch(err => {
-                console.log(`数据库${config.dbName}连接失败`)
-                console.log('失败错误：')
-                console.log(err)
+            } else {
+                mongoose.connect(`${config.dbUrl}/${config.dbName}`)
 
-                reject(err)
-            })
+                db = mongoose.connection
+
+                db.on('error', () => {
+                    reject({
+                        status: false,
+                        message: '连接Mongodb失败'
+                    })
+                })
+
+                db.once('open', () => {
+                    resolve({
+                        status: true,
+                        message: '连接Mongodb成功'
+                    })
+                })
+            }
         })
     }
 }

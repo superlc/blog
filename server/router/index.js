@@ -1,50 +1,58 @@
 const Router = require('koa-router')
-const ObjectId = require('mongodb').ObjectId
-const MarkdownIt = require('markdown-it')
-const hljs = require('highlight.js')
+// const ObjectId = require('mongodb').ObjectId
+
 const router = new Router()
 
+const db = require('../../db/index')
 const Post = require('../../modules/post')
+
+const md = require('../md')
 
 // 获取文章列表
 router.get('/api/getPosts', async (ctx, next) => {
-    const postIns = new Post({})
-    const posts = await postIns.find({})
-    ctx.body = {
-        code: 0,
-        data: posts
+    const connectResult = await db.connect()
+
+    if (connectResult.status) {
+        // 构建一个post实例
+        const post = new Post()
+                        .getModel()
+        const result = await post.find({})
+        // console.log(result)
+        ctx.body = {
+            code: 0,
+            data: result
+        }
+    } else {
+        ctx.body = {
+            code: 999,
+            message: connectResult.message
+        }
     }
 })
 
 // 获取文章详情
 router.get('/api/:id/detail', async (ctx, next) => {
     const {id} = ctx.params
-    const postIns = new Post({
-        _id: ObjectId(id)
-    })
-    const post = await postIns.find({
-        _id: ObjectId(id)
-    })
+    
+    const connectResult = await db.connect()
 
-    // 对文章要展示的文章内容进行渲染
-    const md = new MarkdownIt({
-        highlight: function (str, lang) {
-            if (lang && hljs.getLanguage(lang)) {
-              try {
-                return '<pre class="hljs"><code>' +
-                       hljs.highlight(lang, str, true).value +
-                       '</code></pre>';
-              } catch (__) {}
-            }
+    if (connectResult.status) {
+        // 构建一个post实例
+        const post = new Post()
+                        .getModel()
+        const result = await post.findById(id)
         
-            return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
-        }
-    })
-    post[0].content = md.render(post[0].content)
+        result.content = md.render(result.content)
 
-    ctx.body = {
-        code: 0,
-        data: post[0]
+        ctx.body = {
+            code: 0,
+            data: result
+        }
+    } else {
+        ctx.body = {
+            code: 999,
+            message: connectResult.message
+        }
     }
 })
 
