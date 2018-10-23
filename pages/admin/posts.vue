@@ -7,15 +7,14 @@
                 <span>新建文章</span>
             </div>
             <ul class="posts">
-                <li class="post">
+                <li  
+                    v-for="(post, index) in posts"
+                    :key="index"
+                    class="post"
+                    @click="handleClickPost(index)">
                     <i 
                         class="el-icon-document" />
-                    <span class="post-title">我是一片优秀的文章</span>
-                </li>
-                <li class="post">
-                    <i 
-                        class="el-icon-document" />
-                    <span class="post-title">我是一片优秀的文章</span>
+                    <span class="post-title">{{ post.title }}</span>
                 </li>
             </ul>
         </div>
@@ -42,16 +41,37 @@
     export default {
         layout: 'edit',
         components: {},
-        asyncData({}) {
+        async asyncData({ app }) {
+            const res = await app.$axios.get('posts')
+            const result = res.data
 
+            let posts = []
+            if (result.code === 0){
+                posts = result.data
+            }
+            return {
+                posts: posts
+            }
         },
         data() {
             return {
+                // 文章的id
+                id: '',
                 title: this.getTodayDate(),
                 postContent: ''
             }
         },
         methods: {
+            handleClickPost(index) {
+                const post = this.posts[index]
+                console.log(post)
+                this.updateOpArea(post)
+            },
+            updateOpArea(post) {
+                this.id = post._id
+                this.title = post.title
+                this.postContent = post.content
+            },
             getTodayDate(){
                 const d = new Date()
                 const year = d.getFullYear()
@@ -61,15 +81,47 @@
                 return `${year}-${month}-${day}`
             },
             async savePost() {
+                const id = this.id
                 const title = this.title
                 const content = this.postContent
 
                 if (title && content) {
-                    const insertResult = await this.$axios.post('createPost', {
-                        title,
-                        content
-                    })
-                    console.log(insertResult)
+                    if (!this.id) {
+                        const insertResult = await this.$axios.post('post/add', {
+                            title,
+                            content
+                        })
+                        console.log('iiiiiiiiiiiii', insertResult)
+                        if (insertResult.data.code === 0) {
+                            this.$message({
+                                message: '文章修改成功',
+                                type: 'success'
+                            })
+                        } else {
+                            this.$message({
+                                message: '文章修改失败',
+                                type: 'fail'
+                            })
+                        }
+                    } else {
+                        const editResult = await this.$axios.post('post/edit', {
+                            id,
+                            title,
+                            content
+                        })
+                        console.log('eeeeeeeeeeeeeee', editResult)
+                        if (editResult.data.code === 0) {
+                            this.$message({
+                                message: '文章修改成功',
+                                type: 'success'
+                            })
+                        } else {
+                            this.$message({
+                                message: '文章修改失败',
+                                type: 'fail'
+                            })
+                        }
+                    }
                 }
             }
         }

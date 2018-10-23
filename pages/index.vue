@@ -44,7 +44,7 @@
           Header
       },
       async asyncData({ app }) {
-          const res = await app.$axios.get('getPosts')
+          const res = await app.$axios.get('posts')
           const result = res.data
 
           let posts = []

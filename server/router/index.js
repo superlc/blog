@@ -9,7 +9,7 @@ const Post = require('../../modules/post')
 const md = require('../md')
 
 // 获取文章列表
-router.get('/api/getPosts', async (ctx, next) => {
+router.get('/api/posts', async (ctx, next) => {
     const connectResult = await db.connect()
 
     if (connectResult.status) {
@@ -62,19 +62,20 @@ router.post('/api/:id/delete', (ctx, next) => {
 })
 
 // 创建文章
-router.post('/api/createPost', async (ctx, next) => {
+router.post('/api/post/add', async (ctx, next) => {
     const {title, content} = ctx.request.body
 
-    const post = new Post({
-        title,
-        content,
-        author: 'cluo',
-        createTime: new Date()
-    })
+    const connectResult = await db.connect()
 
-    const result = await post.insert()
+    if (connectResult.status) {
+        // 构建一个post实例
+        const post = new Post({
+            title,
+            content
+        }).getModel()
+        const result = await post.save()
+        console.log(result)
 
-    if(result._id) {
         ctx.body = {
             code: 0,
             data: result
@@ -82,7 +83,44 @@ router.post('/api/createPost', async (ctx, next) => {
     } else {
         ctx.body = {
             code: 999,
-            data: err
+            message: connectResult.message
+        }
+    }
+})
+
+// 修改文章
+router.post('/api/post/edit', async (ctx, next) => {
+    const {id, title, content} = ctx.request.body
+
+    const connectResult = await db.connect()
+
+    if (connectResult.status) {
+        // 构建一个post实例
+        const post = new Post().getModel()
+        const result = await post.updateOne({
+            _id: id
+        }, {
+            title,
+            content
+        })
+        console.log(result)
+        if (result.n > 0) {
+            ctx.body = {
+                code: 0,
+                data: {}
+            }
+        } else {
+            ctx.body = {
+                code: 999,
+                data: {
+                    message: '更新文章信息失败'
+                }
+            }
+        }
+    } else {
+        ctx.body = {
+            code: 999,
+            message: connectResult.message
         }
     }
 })
