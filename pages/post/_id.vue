@@ -16,12 +16,14 @@
                     <div v-html="post.content" />
                 </div>
             </div>
+            <!--
             <div class="post-op">
                 <el-button 
                     type="primary" 
                     icon="el-icon-star-off"
                 >喜欢</el-button>
             </div>
+            -->
         </div>
     </section>
 </template>

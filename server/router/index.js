@@ -6,7 +6,9 @@ const router = new Router()
 const db = require('../../db/index')
 const Post = require('../../modules/post')
 
-const md = require('../md')
+const md = require('../utils/md')
+
+const Upload = require('../utils/upload')
 
 // 获取文章列表
 router.get('/api/posts', async (ctx, next) => {
@@ -121,6 +123,19 @@ router.post('/api/post/edit', async (ctx, next) => {
         ctx.body = {
             code: 999,
             message: connectResult.message
+        }
+    }
+})
+
+// 上传图片
+router.post('/api/post/addImg', async (ctx, next) => {
+    console.log(ctx.request.body)
+    const upload = new Upload()
+    const url = await upload.save(ctx)
+    ctx.body = {
+        code: 0,
+        data: {
+            url
         }
     }
 })

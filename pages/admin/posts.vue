@@ -27,7 +27,9 @@
             </div>
             <!-- 显示编辑的原始文本 -->
             <mavon-editor 
-                v-model="postContent"/>
+                ref="md"
+                v-model="postContent"
+                @imgAdd="insertImg"/>
             <div class="btn-wrapper">
                 <el-button 
                     type="primary" 
@@ -123,6 +125,25 @@
                         }
                     }
                 }
+            },
+            async insertImg(pos, $file) {
+                console.log('pppppppppppppppp', pos, $file)
+                // 第一步.将图片上传到服务器.
+                var formdata = new FormData();
+                formdata.append('image', $file);
+                this.$axios({
+                        url: 'post/addImg',
+                        method: 'post',
+                        data: formdata,
+                        headers: { 
+                            'Content-Type': 'multipart/form-data' 
+                            },
+                        }).then((res) => {
+                            const {url} = res.data.data
+                            console.log('rrrrrrrrrrrr', res)
+                            const host = window.location.host
+                            this.$refs.md.$img2Url(pos, `${url}`);
+                        })
             }
         }
     };
