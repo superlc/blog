@@ -59,8 +59,27 @@ router.get('/api/:id/detail', async (ctx, next) => {
 })
 
 // 删除文章
-router.post('/api/:id/delete', (ctx, next) => {
+router.post('/api/post/delete', async (ctx, next) => {
+    const {id} = ctx.request.body
 
+    const connectResult = await db.connect()
+
+    if (connectResult.status) {
+        // 构建一个post实例
+        const post = new Post()
+                        .getModel()
+        const result = await post.findByIdAndDelete(id)
+        console.log(`Delete post : ${id}`, result)
+        ctx.body = {
+            code: 0,
+            data: result
+        }
+    } else {
+        ctx.body = {
+            code: 999,
+            message: connectResult.message
+        }
+    }
 })
 
 // 创建文章

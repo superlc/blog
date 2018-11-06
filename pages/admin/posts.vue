@@ -33,7 +33,11 @@
             <div class="btn-wrapper">
                 <el-button 
                     type="primary" 
-                    @click="savePost">保存文章</el-button>
+                    @click="handleSavePost">保存文章</el-button>
+                <el-button 
+                    v-if="id"
+                    type="default" 
+                    @click="handleDelPost">删除文章</el-button>
             </div>
         </div>
     </section>
@@ -82,7 +86,7 @@
 
                 return `${year}-${month}-${day}`
             },
-            async savePost() {
+            async handleSavePost() {
                 const id = this.id
                 const title = this.title
                 const content = this.postContent
@@ -93,7 +97,6 @@
                             title,
                             content
                         })
-                        console.log('iiiiiiiiiiiii', insertResult)
                         if (insertResult.data.code === 0) {
                             this.$message({
                                 message: '文章修改成功',
@@ -111,7 +114,6 @@
                             title,
                             content
                         })
-                        console.log('eeeeeeeeeeeeeee', editResult)
                         if (editResult.data.code === 0) {
                             this.$message({
                                 message: '文章修改成功',
@@ -125,6 +127,31 @@
                         }
                     }
                 }
+            },
+            async handleDelPost() {
+                const id = this.id
+
+                this.$confirm('是否删除此文章?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    })
+                    this.$axios.post(`post/delete`, {
+                            id
+                        }).then((res) => {
+                            // 刷新页面
+                            
+                        })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    })     
+                })
             },
             async insertImg(pos, $file) {
                 console.log('pppppppppppppppp', pos, $file)
@@ -140,7 +167,6 @@
                             },
                         }).then((res) => {
                             const {url} = res.data.data
-                            console.log('rrrrrrrrrrrr', res)
                             const host = window.location.host
                             this.$refs.md.$img2Url(pos, `${url}`);
                         })
