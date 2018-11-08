@@ -16,8 +16,7 @@ router.get('/api/posts', async (ctx, next) => {
 
     if (connectResult.status) {
         // 构建一个post实例
-        const post = new Post()
-                        .getModel()
+        const post = new Post().getModel()
         const result = await post.find({})
         // console.log(result)
         ctx.body = {
@@ -40,8 +39,7 @@ router.get('/api/:id/detail', async (ctx, next) => {
 
     if (connectResult.status) {
         // 构建一个post实例
-        const post = new Post()
-                        .getModel()
+        const post = new Post().getModel()
         const result = await post.findById(id)
         
         result.content = md.render(result.content)
@@ -66,8 +64,7 @@ router.post('/api/post/delete', async (ctx, next) => {
 
     if (connectResult.status) {
         // 构建一个post实例
-        const post = new Post()
-                        .getModel()
+        const post = new Post().getModel()
         const result = await post.findByIdAndDelete(id)
         console.log(`Delete post : ${id}`, result)
         ctx.body = {
@@ -89,11 +86,14 @@ router.post('/api/post/add', async (ctx, next) => {
     const connectResult = await db.connect()
 
     if (connectResult.status) {
-        // 构建一个post实例
-        const post = new Post({
+        // 获取Post的model类
+        const PostModel = new Post().getModel()
+        // 创建一个基于PostModel的实例，这个地方跟其他的引用model的能力不同，必须如此
+        const post = new PostModel({
             title,
             content
-        }).getModel()
+        })
+
         const result = await post.save()
         console.log(result)
 

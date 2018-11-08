@@ -39,7 +39,8 @@ module.exports = {
   */
   plugins: [
     '@/plugins/element-ui',
-    '@/plugins/mavon-editor'
+    '@/plugins/mavon-editor',
+    '@/plugins/axios'
   ],
 
   /*

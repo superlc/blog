@@ -44,8 +44,7 @@
           Header
       },
       async asyncData({ app }) {
-          const res = await app.$axios.get('posts')
-          const result = res.data
+          const result = await app.$axios.get('posts')
 
           let posts = []
           if (result.code === 0){
@@ -61,7 +60,6 @@
           }
       },
       mounted() {
-          console.log('pppppppppp', this.posts)
       },
       methods: {}
     };

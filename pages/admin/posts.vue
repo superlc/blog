@@ -48,8 +48,7 @@
         layout: 'edit',
         components: {},
         async asyncData({ app }) {
-            const res = await app.$axios.get('posts')
-            const result = res.data
+            const result = await app.$axios.get('posts')
 
             let posts = []
             if (result.code === 0){
@@ -97,7 +96,7 @@
                             title,
                             content
                         })
-                        if (insertResult.data.code === 0) {
+                        if (insertResult.code === 0) {
                             this.$message({
                                 message: '文章修改成功',
                                 type: 'success'
@@ -114,7 +113,7 @@
                             title,
                             content
                         })
-                        if (editResult.data.code === 0) {
+                        if (editResult.code === 0) {
                             this.$message({
                                 message: '文章修改成功',
                                 type: 'success'
@@ -154,7 +153,6 @@
                 })
             },
             async insertImg(pos, $file) {
-                console.log('pppppppppppppppp', pos, $file)
                 // 第一步.将图片上传到服务器.
                 var formdata = new FormData();
                 formdata.append('image', $file);
@@ -166,7 +164,7 @@
                             'Content-Type': 'multipart/form-data' 
                             },
                         }).then((res) => {
-                            const {url} = res.data.data
+                            const {url} = res.data
                             const host = window.location.host
                             this.$refs.md.$img2Url(pos, `${url}`);
                         })

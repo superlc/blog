@@ -40,10 +40,9 @@
         },
         async asyncData({ params, app }) {
             const {id} = params
-            const res = await app.$axios.get(`${id}/detail`, {
+            const result = await app.$axios.get(`${id}/detail`, {
                 id
             })
-            const result = res.data
             let post = {}
             if (result.code === 0) {
                 post = Object.assign({}, result.data)
