@@ -26,7 +26,7 @@
                                 {{ post.title }}
                             </div>
                             <div class="post-date">
-                                {{ post.createTime }}
+                                {{ post.createTimeText }}
                             </div>
                         </div>
                     </nuxt-link>                
@@ -44,11 +44,28 @@
           Header
       },
       async asyncData({ app }) {
-          const result = await app.$axios.get('posts')
+            const result = await app.$axios.get('posts')
 
-          let posts = []
-          if (result.code === 0){
-              posts = result.data
+            let posts = []
+            if (result.code === 0){
+                posts = result.data.map(item => {
+                    if (item.createTime) {
+                        const d = new Date(item.createTime)
+
+                        const year = d.getFullYear()
+                        const month = d.getMonth() + 1
+                        const day = d.getDate()
+                        const hour = d.getHours()
+                        const minute = d.getMinutes()
+                        const seconds = d.getSeconds()
+
+                        item.createTimeText = `${year}-${month}-${day} ${hour}:${minute}:${seconds}`
+                    } else {
+                        item.createTimeText = ''
+                    }
+
+                    return item
+                })
           }
           return {
               posts: posts
