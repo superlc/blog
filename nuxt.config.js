@@ -1,7 +1,7 @@
 const pkg = require('./package')
 
 module.exports = {
-  mode: 'spa',
+  mode: 'universal',
 
   /*
   ** Headers of the page
@@ -39,7 +39,10 @@ module.exports = {
   */
   plugins: [
     '@/plugins/element-ui',
-    '@/plugins/mavon-editor',
+    {
+      src: '@/plugins/mavon-editor', 
+      ssr: false
+    },
     '@/plugins/axios'
   ],
 
@@ -59,6 +62,7 @@ module.exports = {
     proxy: true
   },
   proxy: {
+    // '/blog_api': 'http://localhost:3000/blog_api'
     '/blog_api': 'https://www.cluo.me/blog_api'
   },
   /*

@@ -12,7 +12,7 @@ export default function ({ $axios, redirect, $message }) {
     })
 
     $axios.onResponse(res => {
-        console.warn('Res:', JSON.stringify(res))
+        // console.warn('Res:', JSON.stringify(res))
         const resData = res.data
         // 网络错误或业务错误
         if (res.status !== 200 || resData.code !== 0) {
