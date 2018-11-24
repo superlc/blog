@@ -55,11 +55,11 @@ module.exports = {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    prefix: '/api/',
+    prefix: '/blog_api/',
     proxy: true
   },
   proxy: {
-    '/api': 'http://182.254.231.153:3000/api'
+    '/blog_api': 'https://www.cluo.me/blog_api'
   },
   /*
   ** Build configuration
