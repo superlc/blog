@@ -25,7 +25,7 @@ class Uploader {
 
             if (image) {
                 const { name, size} = image
-                console.log(image)
+                console.log('sssssssssssssssss', image)
                 
                 var formData = {
                     file: {
@@ -38,7 +38,7 @@ class Uploader {
                 }
                 return new Promise((resolve, reject) => {
                     request.post({
-                    url:'', 
+                    url:'https://www.cluo.me/api/upload', 
                         formData
                     }, (err, httpResponse, body) => {
                         if (err) {
