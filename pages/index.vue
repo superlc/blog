@@ -38,7 +38,23 @@
 
 <script>
     import Header from '~/components/header.vue'
-
+    Date.prototype.format = function(fmt) {
+        var o = {
+            "M+" : this.getMonth()+1,                 //月份
+            "d+" : this.getDate(),                    //日
+            "h+" : this.getHours(),                   //小时
+            "m+" : this.getMinutes(),                 //分
+            "s+" : this.getSeconds(),                 //秒
+            "q+" : Math.floor((this.getMonth()+3)/3), //季度
+            "S"  : this.getMilliseconds()             //毫秒
+        };
+        if(/(y+)/.test(fmt))
+            fmt = fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+        for(var k in o)
+            if(new RegExp("("+ k +")").test(fmt))
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+        return fmt;
+    }
     export default {
       components: {
           Header
@@ -50,16 +66,7 @@
             if (result.code === 0){
                 posts = result.data.map(item => {
                     if (item.date) {
-                        const d = new Date(item.date)
-
-                        const year = d.getFullYear()
-                        const month = d.getMonth() + 1
-                        const day = d.getDate()
-                        const hour = d.getHours()
-                        const minute = d.getMinutes()
-                        const seconds = d.getSeconds()
-
-                        item.createTimeText = `${year}-${month}-${day} ${hour}:${minute}:${seconds}`
+                        item.createTimeText = new Date(item.date).format('yyyy-MM-dd hh:mm:ss')
                     } else {
                         item.createTimeText = ''
                     }
