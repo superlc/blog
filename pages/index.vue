@@ -49,8 +49,8 @@
             let posts = []
             if (result.code === 0){
                 posts = result.data.map(item => {
-                    if (item.createTime) {
-                        const d = new Date(item.createTime)
+                    if (item.date) {
+                        const d = new Date(item.date)
 
                         const year = d.getFullYear()
                         const month = d.getMonth() + 1

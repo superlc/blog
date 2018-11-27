@@ -66,7 +66,7 @@
                 return fmt;
             }
             
-            post.createTime = new Date(post.createTime).format('yyyy-MM-dd hh:mm:ss')
+            post.createTime = new Date(post.date).format('yyyy-MM-dd hh:mm:ss')
 
             console.log(post.createTime)
             return {
