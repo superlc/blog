@@ -17,6 +17,7 @@
     "busboy": "^0.2.14",
     "cross-env": "^5.2.0",
     "element-ui": "^2.4.6",
+    "event-stream": "^4.0.1",
     "formidable": "^1.2.1",
     "highlight.js": "^9.13.1",
     "koa": "^2.5.2",
