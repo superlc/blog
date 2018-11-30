@@ -161,4 +161,22 @@
     .posts >a:last-child .post{
         border-bottom: 0;
     }
+    /* Tabled Portrait */
+    @media screen and (max-width: 768px) {
+        .header{
+            display: none;
+        }
+        .container{
+            width: 100%;
+        }
+        .container .sider{
+            display: none;
+        }
+        .container .main{
+            margin-left: 0;
+        }
+        .post-date{
+            display: none;
+        }
+    }
 </style>

@@ -108,5 +108,19 @@
 .v-note-wrapper .v-note-panel{
   border: 0 !important;
 }
-
+/* Tabled Portrait */
+@media screen and (max-width: 768px) {
+    .main{
+      width: 100%;
+    }
+    .post-title{
+      padding-top: 20px;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    .post-summary{
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+}
 </style>
