@@ -42,7 +42,7 @@ router.get('/blog_api/:id/detail', async (ctx, next) => {
         const post = new Post().getModel()
         const result = await post.findById(id)
         
-        result.content = md.render(result.content)
+        // result.content = md.render(result.content)
 
         ctx.body = {
             code: 0,

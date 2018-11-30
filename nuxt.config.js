@@ -30,8 +30,7 @@ module.exports = {
   */
   css: [
     'element-ui/lib/theme-chalk/index.css',
-    'mavon-editor/dist/css/index.css',
-    'highlight.js/styles/dark.css'
+    'mavon-editor/dist/css/index.css'
   ],
 
   /*
